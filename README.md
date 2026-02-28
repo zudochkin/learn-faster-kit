@@ -41,13 +41,13 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 Install once and use across all projects:
 
 ```bash
-uv tool install learn-faster --from git+https://github.com/cheukyin175/learn-faster-kit.git
+uv tool install my-learn-faster --from git+https://github.com/zudochkin/learn-faster-kit.git
 ```
 
 Then in any project directory, simply run:
 
 ```bash
-learn-faster
+my-learn-faster
 ```
 
 This will auto-initialize on first run and launch Claude Code with FASTER coaching mode.
@@ -57,7 +57,7 @@ This will auto-initialize on first run and launch Claude Code with FASTER coachi
 Run directly without installation:
 
 ```bash
-uvx --from git+https://github.com/cheukyin175/learn-faster-kit.git learn-faster
+uvx --from git+https://github.com/zudochkin/learn-faster-kit.git my-learn-faster
 ```
 
 ### What Gets Installed
@@ -89,7 +89,7 @@ your-project/
 1. **Install the tool**
 
     ```bash
-    uv tool install learn-faster --from git+https://github.com/cheukyin175/learn-faster-kit.git
+    uv tool install my-learn-faster --from git+https://github.com/zudochkin/learn-faster-kit.git
     ```
 
 2. **Launch in any project directory**
@@ -119,7 +119,7 @@ The "T" in FASTER—teaching to retain—is the key differentiator. Here's how i
 
 ```bash
 mkdir learn-go && cd learn-go
-learn-faster                    # Select "Balanced" mode
+my-learn-faster                    # Select "Balanced" mode
 /learn "Go error handling"      # In Claude Code
 ```
 
@@ -146,9 +146,9 @@ Coach: ✅ Great explanation! You nailed the key insight—wrapped errors
 
 ### CLI Commands
 
--   `learn-faster` - Launch Claude Code with FASTER coaching (auto-initializes on first run)
--   `learn-faster init` - Force re-initialization or switch learning modes
--   `learn-faster version` - Show current version
+-   `my-learn-faster` - Launch Claude Code with FASTER coaching (auto-initializes on first run)
+-   `my-learn-faster init` - Force re-initialization or switch learning modes
+-   `my-learn-faster version` - Show current version
 
 ### Claude Code Slash Commands
 
@@ -175,7 +175,7 @@ Each mode provides a tailored coaching experience with mode-specific syllabi and
 
 ```bash
 # Clone the repository
-git clone https://github.com/cheukyin175/learn-faster-kit.git
+git clone https://github.com/zudochkin/learn-faster-kit.git
 cd learn-faster-kit
 
 # Install uv if needed
