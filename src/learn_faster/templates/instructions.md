@@ -217,3 +217,197 @@ tail -30 .learning/<topic-slug>/progress.md
 -   Active learning > passive consumption
 -   Teaching = best retention
 -   Trust the spaced repetition system
+
+# Journal Logging Extension
+
+## Purpose
+
+This system maintains a learning journal in `journal.md`, capturing the
+user's active thinking, explanations, and assignment responses.
+
+The goal is to:
+
+-   Preserve user's original thinking
+-   Enable reflection and spaced repetition
+-   Build a knowledge base of user's understanding
+-   Track intellectual progress over time
+
+------------------------------------------------------------------------
+
+## File Location
+
+    .learning/journal.md
+
+If file does not exist → CREATE it.
+
+------------------------------------------------------------------------
+
+## WHEN to Log
+
+Log ONLY when ALL conditions are true:
+
+✅ User is responding to:
+
+-   Teach-back prompts
+-   Concept explanation requests
+-   Reflection questions
+-   Exercises
+-   Assignments
+-   Philosophical questions
+-   Practice tasks
+
+Examples:
+
+-   "Explain mauvaise foi in your own words"
+-   "How would you teach this?"
+-   "What is bad faith?"
+-   "Apply this concept to your life"
+
+------------------------------------------------------------------------
+
+## DO NOT Log
+
+❌ Do NOT log when user:
+
+-   asks questions
+-   gives commands
+-   gives short confirmations ("yes", "ok")
+-   configures system
+-   navigates topics
+
+Log ONLY active thinking.
+
+------------------------------------------------------------------------
+
+## HOW to Log
+
+Append entry to:
+
+    .learning/journal.md
+
+------------------------------------------------------------------------
+
+## Entry Format
+
+``` markdown
+---
+
+## YYYY-MM-DD HH:mm
+Topic: <topic-slug>
+Concept: <concept name>
+
+### Prompt
+
+<AI question or assignment>
+
+### User Response
+
+<EXACT user words — DO NOT modify, summarize, or interpret>
+
+### Context
+
+Session: <number>
+Phase: <syllabus phase if known>
+
+---
+```
+
+------------------------------------------------------------------------
+
+## CRITICAL RULE: Preserve Raw Thinking
+
+DO NOT:
+
+-   rewrite
+-   summarize
+-   improve
+-   correct
+
+Store EXACT text.
+
+This is user's intellectual artifact.
+
+------------------------------------------------------------------------
+
+## Example
+
+If interaction is:
+
+**AI:**
+
+Explain Sartre's bad faith in your own words
+
+**User:**
+
+Bad faith is when I lie to myself to avoid responsibility
+
+Journal entry becomes:
+
+``` markdown
+---
+
+## 2026-02-27 10:41
+Topic: existentialism
+Concept: mauvaise foi
+
+### Prompt
+
+Explain Sartre's bad faith in your own words
+
+### User Response
+
+Bad faith is when I lie to myself to avoid responsibility
+
+### Context
+
+Session: 3
+Phase: Foundations
+
+---
+```
+
+------------------------------------------------------------------------
+
+## ALSO Log Personal Applications
+
+If user connects concept to their life:
+
+Example:
+
+**User:**
+
+I see this when I say "I'll start Monday"
+
+This MUST be logged.
+
+------------------------------------------------------------------------
+
+## Integration with Progress System
+
+After logging:
+
+``` bash
+python3 .learning/scripts/log_progress.py <topic-slug> "<concept>" "<journal entry created>"
+```
+
+------------------------------------------------------------------------
+
+## Journal is Primary Source of Truth
+
+This file represents:
+
+-   User's thinking evolution
+-   Concept mastery
+-   Self-reflection
+
+Never skip logging.
+
+------------------------------------------------------------------------
+
+## Automatic Behavior
+
+This process must happen silently.
+
+DO NOT tell user you logged it.
+
+Just do it.
