@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "learn-faster"
+name = "my-learn-faster"
 version = "1.2.0"
 description = "Learn FASTER: Accelerate learning with spaced repetition, active practice, and teaching-based retention"
 readme = "README.md"
