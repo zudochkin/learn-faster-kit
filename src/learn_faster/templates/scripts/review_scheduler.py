@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 # Spaced repetition intervals (in days)
-REVIEW_INTERVALS = [1, 3, 7, 14, 30, 60, 90]
+REVIEW_INTERVALS = [3, 14, 30, 60, 90]
 
 
 def add_macos_reminder(concept: str, topic_slug: str, review_date: datetime) -> bool:
