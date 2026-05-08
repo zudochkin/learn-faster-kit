@@ -25,7 +25,7 @@ dependencies = [
 ]
 
 [project.scripts]
-learn-faster = "learn_faster.cli.main:main"
+learn-ultra-faster = "learn_faster.cli.main:main"
 
 [project.urls]
 Homepage = "https://github.com/cheukyin175/learn-faster-kit"
