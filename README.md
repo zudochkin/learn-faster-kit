@@ -47,7 +47,7 @@ uv tool install my-learn-faster --from git+https://github.com/zudochkin/learn-fa
 Then in any project directory, simply run:
 
 ```bash
-my-learn-faster
+learn-ultra-faster
 ```
 
 This will auto-initialize on first run and launch Claude Code with FASTER coaching mode.
@@ -57,12 +57,12 @@ This will auto-initialize on first run and launch Claude Code with FASTER coachi
 Run directly without installation:
 
 ```bash
-uvx --from git+https://github.com/zudochkin/learn-faster-kit.git my-learn-faster
+uvx --from git+https://github.com/zudochkin/learn-faster-kit.git learn-ultra-faster
 ```
 
 ### What Gets Installed
 
-On first run, learn-faster creates:
+On first run, learn-ultra-faster creates:
 
 ```
 your-project/
@@ -96,7 +96,7 @@ your-project/
 
     ```bash
     cd your-learning-project
-    learn-faster
+    learn-ultra-faster
     ```
 
     First run will:
@@ -119,7 +119,7 @@ The "T" in FASTER—teaching to retain—is the key differentiator. Here's how i
 
 ```bash
 mkdir learn-go && cd learn-go
-my-learn-faster                    # Select "Balanced" mode
+learn-ultra-faster                 # Select "Balanced" mode
 /learn "Go error handling"      # In Claude Code
 ```
 
@@ -146,9 +146,9 @@ Coach: ✅ Great explanation! You nailed the key insight—wrapped errors
 
 ### CLI Commands
 
--   `my-learn-faster` - Launch Claude Code with FASTER coaching (auto-initializes on first run)
--   `my-learn-faster init` - Force re-initialization or switch learning modes
--   `my-learn-faster version` - Show current version
+-   `learn-ultra-faster` - Launch Claude Code with FASTER coaching (auto-initializes on first run)
+-   `learn-ultra-faster init` - Force re-initialization or switch learning modes
+-   `learn-ultra-faster version` - Show current version
 
 ### Claude Code Slash Commands
 
