@@ -36,37 +36,37 @@ Use WebFetch to analyze:
 ```json
 [
     {
-        "question": "What type of exam?",
+        "question": "Какой тип экзамена?",
         "header": "Type",
         "multiSelect": false,
         "options": [
             {
-                "label": "Quick Quiz",
+                "label": "Быстрый квиз",
                 "description": "15-20 min, 10-15 questions"
             },
             {
-                "label": "Section Test",
+                "label": "Тест по разделу",
                 "description": "45-60 min, 25-35 questions"
             },
             {
-                "label": "Mock Exam",
+                "label": "Пробный экзамен",
                 "description": "90-120 min, 50-75 questions"
             },
             {
-                "label": "Full Simulation",
+                "label": "Полная симуляция",
                 "description": "Match real exam format exactly"
             }
         ]
     },
     {
-        "question": "Difficulty level?",
+        "question": "Уровень сложности?",
         "header": "Difficulty",
         "multiSelect": false,
         "options": [
-            { "label": "Easier", "description": "Build confidence" },
-            { "label": "Standard", "description": "Match typical difficulty" },
-            { "label": "Challenging", "description": "Push understanding" },
-            { "label": "Mixed", "description": "Progressive difficulty" }
+            { "label": "Легче", "description": "Build confidence" },
+            { "label": "Стандартный", "description": "Match typical difficulty" },
+            { "label": "Сложнее", "description": "Push understanding" },
+            { "label": "Смешанный", "description": "Progressive difficulty" }
         ]
     }
 ]
@@ -79,21 +79,21 @@ Create: `exam/exam-<topic-slug>-<timestamp>.md` (create exam/ directory in proje
 **Structure:**
 
 ```markdown
-# EXAMINATION PAPER: [Topic Name]
+# ЭКЗАМЕНАЦИОННАЯ РАБОТА: [Topic Name]
 
-**Candidate:** **\*\***\_\_\_\_**\*\*** **Date:** \***\*\_\_\*\***
-**Time Allowed:** [X] minutes **Total Marks:** [Y]
+**Кандидат:** **\*\***\_\_\_\_**\*\*** **Дата:** \***\*\_\_\*\***
+**Время:** [X] minutes **Максимальный балл:** [Y]
 
-## INSTRUCTIONS
+## ИНСТРУКЦИИ
 
--   Answer ALL questions
--   Write answers in spaces provided
--   Show working for calculations
--   No notes or materials unless specified
+-   Ответьте на ВСЕ вопросы
+-   Записывайте ответы в отведённых местах
+-   Показывайте ход вычислений
+-   Без конспектов и материалов, если не указано иное
 
 ---
 
-## SECTION A: MULTIPLE CHOICE ([X] marks)
+## РАЗДЕЛ A: ТЕСТ ([X] баллов)
 
 **1.** [Question text]
 
@@ -102,29 +102,29 @@ B. [Option]
 C. [Option]
 D. [Option]
 
-**Answer:** [ ] (2 marks)
+**Ответ:** [ ] (2 баллов)
 
 ---
 
-## SECTION B: SHORT ANSWER ([X] marks)
+## РАЗДЕЛ B: КРАТКИЕ ОТВЕТЫ ([X] баллов)
 
 **[N].** [Question text]
 
-**Answer:**
+**Ответ:**
 
 ---
 
 ---
 
-(5 marks)
+(5 баллов)
 
 ---
 
-## SECTION C: LONG ANSWER ([X] marks)
+## РАЗДЕЛ C: РАЗВЁРНУТЫЕ ОТВЕТЫ ([X] баллов)
 
 **[N].** [Question with scenario/context]
 
-**Answer:**
+**Ответ:**
 
 ---
 
@@ -132,12 +132,12 @@ D. [Option]
 
 ---
 
-(10 marks)
+(10 баллов)
 
 ---
 
-END OF EXAMINATION
-Total: **\_** / [Y] Grade: **\_**
+КОНЕЦ ЭКЗАМЕНА
+Итого: **\_** / [Y] Оценка: **\_**
 ```
 
 ### 4. Generate Answer Key
@@ -145,7 +145,7 @@ Total: **\_** / [Y] Grade: **\_**
 Create: `exam/exam-<topic-slug>-<timestamp>-ANSWERS.md`
 
 ```markdown
-# ANSWER KEY: [Topic Name]
+# КЛЮЧ ОТВЕТОВ: [Topic Name]
 
 ## SECTION A - MULTIPLE CHOICE
 
@@ -159,34 +159,34 @@ Create: `exam/exam-<topic-slug>-<timestamp>-ANSWERS.md`
 ## SECTION B - SHORT ANSWER
 
 **[N].**
-Model Answer: [Complete answer]
-Marking: [Point 1: 2 marks] [Point 2: 2 marks] [Clarity: 1 mark]
-Common mistakes: [List]
+Эталонный ответ: [Complete answer]
+Оценивание: [Point 1: 2 баллов] [Point 2: 2 баллов] [Clarity: 1 mark]
+Частые ошибки: [List]
 
 ## SECTION C - LONG ANSWER
 
 **[N].**
-Model Answer: [Comprehensive answer]
+Эталонный ответ: [Comprehensive answer]
 
-Rubric:
+Критерии:
 
--   Understanding (4 marks): [Criteria]
--   Application (3 marks): [Criteria]
--   Analysis (3 marks): [Criteria]
+-   Понимание (4 баллов): [Criteria]
+-   Применение (3 баллов): [Criteria]
+-   Анализ (3 баллов): [Criteria]
 
-Must include: [Checklist]
+Должно включать: [Checklist]
 
 ---
 
-## GRADING
+## ОЦЕНИВАНИЕ
 
 90-100%: A+ | 80-89%: A | 70-79%: B | 60-69%: C | 50-59%: D | <50%: F
 
-## STUDY RECOMMENDATIONS
+## РЕКОМЕНДАЦИИ ПО ПОДГОТОВКЕ
 
--   Score <60%: Re-study [concepts]
--   Score 60-79%: Review [specific areas]
--   Score 80%+: Minor review of [gaps]
+-   Балл <60%: Повторить [концепции]
+-   Балл 60-79%: Повторить [конкретные темы]
+-   Балл 80%+: Доработать [пробелы]
 ```
 
 ### 5. Convert to PDF
@@ -206,7 +206,7 @@ Creates in exam/ directory:
 ### 6. Inform User
 
 ```
-✅ Exam generated!
+✅ Экзамен сгенерирован!
 
 📄 Files in exam/ directory:
    • exam/exam-<topic-slug>-<timestamp>.pdf
@@ -240,6 +240,8 @@ Creates in exam/ directory:
 -   Appropriate difficulty
 -   Test understanding, not just recall
 -   Based on patterns from real exams online
+-   Include "explain your reasoning" prompts in long answer sections
+-   When 3+ concepts covered: interleave question topics (don't group by concept)
 
 ## Remember
 

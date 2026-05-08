@@ -102,44 +102,47 @@ After quiz, update the concept's quiz_count in .learning/{topic_slug}/concepts/[
         "quiz_needed": True,
         "least_reviewed_concepts": concepts,
         "llm_directive": directive.strip(),
-        "suggested_prompt": f"Quick quiz time! Let's test your understanding of one of these: {', '.join(concept_names)}"
+        "suggested_prompt": f"Быстрый квиз! Проверим понимание: {', '.join(concept_names)}"
     }
 
     print(json.dumps(output, indent=2))
 
 
-def record_quiz_attempt(topic_slug: str, concept: str, correct: bool, base_dir: str = ".learning"):
+def record_quiz_attempt(topic_slug: str, concept: str, correct: bool, confidence: int = None, base_dir: str = ".learning"):
     """
-    Record a quiz attempt for a concept.
+    Record a quiz attempt for a concept with optional confidence rating.
 
     Args:
         topic_slug: Slug of the topic
         concept: Name of the concept
         correct: Whether the answer was correct
+        confidence: Pre-test confidence 1-5 (optional, for metacognitive calibration)
         base_dir: Base directory for learning data
     """
     topic_dir = Path(base_dir) / topic_slug
     concepts_dir = topic_dir / "concepts"
 
-    # Find the concept file
     concept_slug = concept.lower().replace(" ", "-").replace("/", "-")
     concept_file = concepts_dir / f"{concept_slug}.json"
 
     if not concept_file.exists():
-        print(f"❌ Concept '{concept}' not found")
+        print(f"❌ Концепция '{concept}' не найдена")
         return False
 
     with open(concept_file, "r") as f:
         data = json.load(f)
 
-    # Update quiz history
     if "quiz_history" not in data:
         data["quiz_history"] = []
 
-    data["quiz_history"].append({
+    entry = {
         "timestamp": datetime.now().isoformat(),
-        "correct": correct
-    })
+        "correct": correct,
+    }
+    if confidence is not None:
+        entry["confidence"] = max(1, min(5, confidence))
+
+    data["quiz_history"].append(entry)
 
     if "quiz_count" not in data:
         data["quiz_count"] = 0
@@ -155,17 +158,98 @@ def record_quiz_attempt(topic_slug: str, concept: str, correct: bool, base_dir: 
 
     accuracy = (data["quiz_correct_count"] / data["quiz_count"] * 100) if data["quiz_count"] > 0 else 0
 
+    calibration_msg = ""
+    if confidence is not None:
+        conf_norm = confidence / 5.0
+        acc_norm = 1.0 if correct else 0.0
+        gap = conf_norm - acc_norm
+        if gap > 0.3:
+            calibration_msg = " Самоуверенность: уверенность была выше результата."
+        elif gap < -0.3:
+            calibration_msg = " Ты знаешь больше, чем думаешь!"
+
     output = {
         "status": "success",
         "concept": concept,
         "correct": correct,
+        "confidence": confidence,
         "quiz_count": data["quiz_count"],
         "accuracy": round(accuracy, 1),
-        "llm_directive": f"Quiz attempt recorded. {'Great job!' if correct else 'Keep practicing this concept.'}"
+        "llm_directive": f"Quiz attempt recorded. {'Great job!' if correct else 'Keep practicing this concept.'}{calibration_msg}",
     }
 
     print(json.dumps(output, indent=2))
     return True
+
+
+def get_calibration(topic_slug: str, base_dir: str = ".learning"):
+    """
+    Compute metacognitive calibration metrics across all concepts.
+    """
+    topic_dir = Path(base_dir) / topic_slug
+    concepts_dir = topic_dir / "concepts"
+
+    if not concepts_dir.exists():
+        output = {
+            "status": "no_data",
+            "llm_directive": "No concept data available for calibration.",
+        }
+        print(json.dumps(output, indent=2))
+        return
+
+    confidences = []
+    accuracies = []
+    overconfident = []
+    underconfident = []
+
+    for concept_file in concepts_dir.glob("*.json"):
+        with open(concept_file, "r") as f:
+            data = json.load(f)
+
+        history = data.get("quiz_history", [])
+        rated = [h for h in history if h.get("confidence") is not None]
+        if not rated:
+            continue
+
+        concept_name = data.get("concept", concept_file.stem)
+        concept_confs = [h["confidence"] for h in rated]
+        concept_accs = [1.0 if h["correct"] else 0.0 for h in rated]
+
+        avg_conf = sum(concept_confs) / len(concept_confs)
+        avg_acc = sum(concept_accs) / len(concept_accs)
+
+        confidences.extend(concept_confs)
+        accuracies.extend(concept_accs)
+
+        conf_norm = avg_conf / 5.0
+        if conf_norm - avg_acc > 0.2:
+            overconfident.append(concept_name)
+        elif avg_acc - conf_norm > 0.2:
+            underconfident.append(concept_name)
+
+    if not confidences:
+        output = {
+            "status": "no_calibration_data",
+            "llm_directive": "No confidence-rated quiz attempts yet. Calibration data will appear after quizzes with confidence ratings.",
+        }
+        print(json.dumps(output, indent=2))
+        return
+
+    avg_confidence = round(sum(confidences) / len(confidences), 2)
+    avg_accuracy = round(sum(accuracies) / len(accuracies) * 100, 1)
+    calibration_gap = round(avg_confidence / 5.0 - sum(accuracies) / len(accuracies), 2)
+
+    output = {
+        "status": "success",
+        "avg_confidence": avg_confidence,
+        "avg_accuracy_pct": avg_accuracy,
+        "calibration_gap": calibration_gap,
+        "overconfident_concepts": overconfident,
+        "underconfident_concepts": underconfident,
+        "total_rated_attempts": len(confidences),
+        "llm_directive": f"Calibration gap: {calibration_gap:+.2f} (positive=overconfident, negative=underconfident).",
+    }
+    print(json.dumps(output, indent=2))
 
 
 if __name__ == "__main__":
@@ -173,8 +257,9 @@ if __name__ == "__main__":
 
     if len(sys.argv) < 2:
         print("Usage:")
-        print("  Generate quiz:  python3 concept_quiz.py generate <topic_slug>")
-        print("  Record attempt: python3 concept_quiz.py record <topic_slug> <concept> <correct>")
+        print("  Generate quiz:   python3 concept_quiz.py generate <topic_slug>")
+        print("  Record attempt:  python3 concept_quiz.py record <topic_slug> <concept> <correct> [confidence 1-5]")
+        print("  Get calibration: python3 concept_quiz.py calibration <topic_slug>")
         sys.exit(1)
 
     command = sys.argv[1]
@@ -184,6 +269,9 @@ if __name__ == "__main__":
     elif command == "record" and len(sys.argv) >= 5:
         concept = sys.argv[3]
         correct = sys.argv[4].lower() in ['true', '1', 'yes']
-        record_quiz_attempt(sys.argv[2], concept, correct)
+        confidence = int(sys.argv[5]) if len(sys.argv) >= 6 else None
+        record_quiz_attempt(sys.argv[2], concept, correct, confidence=confidence)
+    elif command == "calibration" and len(sys.argv) >= 3:
+        get_calibration(sys.argv[2])
     else:
         print("❌ Invalid command or missing arguments")

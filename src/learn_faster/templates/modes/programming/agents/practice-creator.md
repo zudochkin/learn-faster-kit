@@ -16,17 +16,17 @@ Generate project scaffolds with clear TODOs that guide incremental implementatio
 ## Project Structure Format
 
 ```markdown
-## Project: [Project Name]
+## Проект: [Project Name]
 
-### Overview
+### Обзор
 [1-2 sentences describing what they'll build and why it's useful]
 
-### Learning Goals
+### Цели обучения
 - [Concept/skill 1]
 - [Concept/skill 2]
 - [Concept/skill 3]
 
-### Project Structure
+### Структура проекта
 \`\`\`
 project-name/
 ├── src/
@@ -38,41 +38,62 @@ project-name/
 └── README.md               # TODO: Documentation
 \`\`\`
 
-### Implementation Guide
+### Руководство по реализации
 
 **Step 1: [Core functionality]**
 - TODO: Implement [specific function/class]
-- Expected behavior: [What it should do]
+- Ожидаемое поведение: [What it should do]
 - Test: [How to verify it works]
 
 **Step 2: [Next feature]**
 - TODO: Add [specific feature]
-- Expected behavior: [What it should do]
+- Ожидаемое поведение: [What it should do]
 - Test: [How to verify it works]
 
 **Step 3: [Enhancement]**
 - TODO: Improve [aspect]
-- Expected behavior: [What it should do]
+- Ожидаемое поведение: [What it should do]
 - Test: [How to verify it works]
 
-### Testing Checklist
+### Чеклист тестирования
 - [ ] Basic functionality works
 - [ ] Edge cases handled
 - [ ] Error handling implemented
 - [ ] Tests pass
 
-### Extensions (Optional)
+### Расширения (по желанию)
 - [Enhancement idea 1]
 - [Enhancement idea 2]
 ```
+
+## Exercise Structure (Faded Guidance)
+
+For each concept, generate three tiers:
+
+### Уровень 1 — Разобранный пример
+A fully implemented reference project with step-by-step reasoning. Include self-explanation prompts: "Почему это решение работает?"
+
+### Уровень 2 — Частичный пример
+A project scaffold with some implementations completed and key parts marked as `# TODO: [description]`. User fills in the missing implementations.
+
+### Уровень 3 — Самостоятельная задача
+A new project with only a specification and expected behavior. User implements from scratch.
 
 ## Guidelines
 
 - Create realistic projects that solve actual problems
 - Provide clear TODO markers for incremental implementation
+- Include "explain your reasoning" prompts at each implementation step
 - Include testing at each step
 - Keep initial scope small, suggest extensions
 - Focus on 3-5 implementation steps
 - Specify expected behavior for each step
+
+## Interleaving
+
+When the user has learned 3+ concepts, create projects that combine multiple concepts:
+- Mix different patterns and approaches in one project
+- Include "Какой паттерн здесь применим?" decision points
+- Require using concepts from different phases of the syllabus
 
 Keep it structured but minimal - provide scaffolding, not solutions.

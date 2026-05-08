@@ -22,7 +22,7 @@ Generate an encouraging progress report showing learning journey and next steps.
 
 **If no `.learning/`:**
 
-- Inform: "No learning in progress yet. Use `/learn [topic]` to start!"
+- Inform: "Обучение ещё не начато. Используй `/learn [тема]` чтобы начать!"
 
 **Calculate metrics:**
 
@@ -36,50 +36,62 @@ Generate an encouraging progress report showing learning journey and next steps.
 **Present report:**
 
 ```markdown
-📊 Progress Report: [Topic Name]
+📊 Отчёт о прогрессе: [Topic Name]
 
-🎯 Overview
-Sessions: [N] | Days: [N] | Phase: [X] - [Name]
-Syllabus: [X]% ([M]/[Total] items)
+🎯 Обзор
+Сессий: [N] | Дней: [N] | Фаза: [X] - [Name]
+Программа: [X]% ([M]/[Total] пунктов)
 
-📚 Concepts Learned
+📚 Изученные концепции
 ✓ [Concept 1]
 ✓ [Concept 2]
-... ([N] total)
+... ([N] всего)
 
-🎉 Recent Wins
+🎉 Последние достижения
 
 - [Achievement 1]
 - [Achievement 2]
 
-📅 Review Stats
-Completed: [N] | Scheduled: [N]
-Next review: [date] ([N] concepts)
+📅 Статистика повторений
+Завершено: [N] | Запланировано: [N]
+Следующее повторение: [date] ([N] концепций)
 
-🎯 Next Focus
+🧠 Инсайты обучения
+Записей: [N] | Теги: insight ([N]), mastery ([N]), struggle ([N])
+Калибровка: уверенность [X] vs качество [Y] (разрыв: [Z])
+Тренд: [recent dominant tags]
+
+🎯 Следующие шаги
 
 1. [Next unchecked item]
 2. [Next unchecked item]
 
-💡 Insights
+💡 Наблюдения
 [Personalized based on data]
 ```
 
 **Celebrate milestones:**
 
-- 5 sessions: "🎉 Building momentum!"
-- 10 sessions: "🔥 Committed to learning!"
-- 25%: "🎯 Quarter way!"
-- 50%: "🚀 Halfway there!"
-- 75%: "⭐ Almost mastered!"
-- 100%: "🏆 Syllabus complete!"
+- 5 sessions: "🎉 Набираем обороты!"
+- 10 sessions: "🔥 Серьёзный настрой!"
+- 25%: "🎯 Четверть пути!"
+- 50%: "🚀 Половина пройдена!"
+- 75%: "⭐ Почти освоено!"
+- 100%: "🏆 Программа завершена!"
 
 **Consistency tracking:**
 
-- 3-day streak: "Nice! 3 days in a row!"
-- 7-day: "🔥 One week streak!"
-- 14-day: "🌟 Two weeks strong!"
-- 30-day: "🏅 One month!"
+- 3-day streak: "Отлично! 3 дня подряд!"
+- 7-day: "🔥 Неделя без пропусков!"
+- 14-day: "🌟 Две недели подряд!"
+- 30-day: "🏅 Месяц!"
+
+**Data sources for Learning Insights:**
+
+- Run `python3 .learning/scripts/journal_logger.py stats <topic-slug>` for tag distribution, calibration gap, and trends
+- Run `python3 .learning/scripts/concept_quiz.py calibration <topic-slug>` for overconfident/underconfident concepts
+- If calibration gap > 0.15: suggest "Стоит больше проверять себя перед тем, как двигаться дальше"
+- If calibration gap < -0.15: suggest "Ты знаешь больше, чем думаешь — доверяй себе"
 
 **After report:**
 

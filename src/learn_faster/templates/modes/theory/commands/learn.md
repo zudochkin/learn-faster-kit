@@ -14,7 +14,7 @@ Initialize theory-focused learning for the specified topic using the FASTER fram
 
 **If a topic already exists:**
 
-- Inform: "This project is already learning [topic name]"
+- Inform: "Этот проект уже изучает [topic name]"
 - Check for due reviews first (conduct before new learning if any)
 - Continue with current topic (1 project = 1 learning goal)
 
@@ -26,71 +26,71 @@ Initialize theory-focused learning for the specified topic using the FASTER fram
 ```json
 [
   {
-    "question": "What depth of understanding do you want?",
-    "header": "Depth",
+    "question": "Какой глубины понимания ты хочешь достичь?",
+    "header": "Глубина",
     "multiSelect": false,
     "options": [
       {
-        "label": "Foundational",
-        "description": "Core concepts and basic intuition"
+        "label": "Базовый",
+        "description": "Ключевые концепции и базовая интуиция"
       },
       {
-        "label": "Intermediate",
-        "description": "How and why things work internally"
+        "label": "Средний",
+        "description": "Как и почему всё работает изнутри"
       },
       {
-        "label": "Deep",
-        "description": "First principles and mathematical foundations"
+        "label": "Глубокий",
+        "description": "Первые принципы и математические основы"
       },
       {
-        "label": "Expert",
-        "description": "Research-level understanding, cutting edge"
+        "label": "Экспертный",
+        "description": "Понимание на уровне исследований, передний край"
       }
     ]
   },
   {
-    "question": "What's your learning style for concepts?",
-    "header": "Style",
+    "question": "Какой стиль изучения концепций тебе ближе?",
+    "header": "Стиль",
     "multiSelect": true,
     "options": [
       {
-        "label": "Analogies",
-        "description": "Learn through comparisons and metaphors"
+        "label": "Аналогии",
+        "description": "Учиться через сравнения и метафоры"
       },
       {
-        "label": "First principles",
-        "description": "Build up from fundamental truths"
+        "label": "Первые принципы",
+        "description": "Строить от фундаментальных истин"
       },
       {
-        "label": "Visual models",
-        "description": "Diagrams and visual representations"
+        "label": "Визуальные модели",
+        "description": "Диаграммы и визуальные представления"
       },
       {
-        "label": "Historical context",
-        "description": "Why this was invented, evolution of ideas"
+        "label": "Исторический контекст",
+        "description": "Почему это появилось, эволюция идей"
       }
     ]
   },
   {
-    "question": "What are you trying to achieve?",
-    "header": "Goal",
+    "question": "Чего ты хочешь добиться?",
+    "header": "Цель",
     "multiSelect": false,
     "options": [
       {
-        "label": "Understand deeply",
-        "description": "Build robust mental models"
+        "label": "Глубокое понимание",
+        "description": "Построить надёжные ментальные модели"
       },
       {
-        "label": "Research",
-        "description": "Foundation for further study"
+        "label": "Исследование",
+        "description": "Фундамент для дальнейшего изучения"
       },
       {
-        "label": "Teach others",
-        "description": "Explain clearly to others"
+        "label": "Учить других",
+        "description": "Уметь понятно объяснять другим"
       },
       {
-        "label": "Pure curiosity",
-        "description": "Just want to know how it works"
+        "label": "Чистое любопытство",
+        "description": "Просто хочу знать, как это работает"
       }
     ]
   }
@@ -119,6 +119,17 @@ Initialize theory-focused learning for the specified topic using the FASTER fram
 - **Deep Dive Topics:** Optional advanced areas for curious learners
 - **Common Misconceptions:** What people get wrong and why
 - **Success Criteria:** "I can explain X from first principles" not "I memorized X"
+
+**Ongoing Learning (when topic already exists and syllabus is generated):**
+
+Before presenting the next syllabus item:
+
+1. **Activate prior knowledge:** "What do you already know about [next concept]?" or "What's your current mental model?"
+2. **Build on their understanding:** Connect to existing knowledge, note where it's correct and where it needs refinement
+3. **Follow the Concrete → Abstract → Concrete pattern:** Start with a real-world phenomenon, derive the principle, apply to a different domain
+4. **Apply elaborative interrogation:** For every new principle, ask "Why must this be true?" before proceeding
+5. **Use self-explanation checkpoints:** Pause after each reasoning step. Do not proceed without explanation.
+6. **Use faded guidance automatically:** Worked derivation → partial proof → independent construction per concept
 
 **Important:**
 

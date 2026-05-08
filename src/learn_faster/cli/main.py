@@ -102,7 +102,7 @@ def create_or_update_settings(claude_dir: Path) -> None:
             ]
         },
         "companyAnnouncements": [
-            "🚀 Learn FASTER is active! Use /learn \"Topic\" to start learning",
+            "🚀 Learn FASTER активен! Используй /learn \"Тема\" чтобы начать обучение",
         ]
     }
 
@@ -168,7 +168,7 @@ def init_project() -> None:
     templates_dir = get_templates_dir()
 
     print(BANNER)
-    print_header("\nInitializing Learn FASTER in current project...\n")
+    print_header("\nИнициализация Learn FASTER в текущем проекте...\n")
 
     # Ask for learning mode selection
     
@@ -176,13 +176,13 @@ def init_project() -> None:
     learning_mode_question = [
         inquirer.List(
             'mode',
-            message="Choose your learning mode",
+            message="Выбери режим обучения",
             choices=[
-                ('Balanced         - Mix of theory, practice, and application', 'balanced'),
-                ('Exam-Oriented   - Printable exam papers, practice tests, and certification prep', 'exam'),
-                ('Theory-Focused   - Deep conceptual understanding and mental models', 'theory'),
-                ('Practical        - Build projects immediately, learn by doing', 'practical'),
-                ('Programming      - Learn programming through building projects', 'programming'),
+                ('Сбалансированный — Микс теории, практики и применения', 'balanced'),
+                ('Экзаменационный  — Печатные экзамены, тесты, подготовка к сертификации', 'exam'),
+                ('Теоретический    — Глубокое концептуальное понимание', 'theory'),
+                ('Практический     — Сразу строить проекты, учиться на деле', 'practical'),
+                ('Программирование — Учиться через создание проектов', 'programming'),
             ],
             default='balanced',
         ),
@@ -192,19 +192,19 @@ def init_project() -> None:
     learning_mode = mode_answer['mode'] if mode_answer else 'balanced'
 
     mode_names = {
-        "exam": "Exam-Oriented",
-        "theory": "Theory-Focused",
-        "practical": "Practical",
-        "balanced": "Balanced",
-        "programming": "Programming"
+        "exam": "Экзаменационный",
+        "theory": "Теоретический",
+        "practical": "Практический",
+        "balanced": "Сбалансированный",
+        "programming": "Программирование"
     }
-    print_success(f"Selected: {mode_names[learning_mode]} mode\n")
+    print_success(f"Выбрано: {mode_names[learning_mode]}\n")
 
     # Ask about macOS Reminders (only on macOS)
     macos_reminders = False
     if platform.system() == "Darwin":
-        response = input(f"{Colors.CYAN}Enable macOS Reminders for review notifications? (y/n):{Colors.RESET} ").strip().lower()
-        macos_reminders = response in ['y', 'yes']
+        response = input(f"{Colors.CYAN}Включить напоминания macOS для повторений? (д/н):{Colors.RESET} ").strip().lower()
+        macos_reminders = response in ['y', 'yes', 'д', 'да']
 
     # Create .claude directory structure
     claude_dir = cwd / ".claude"
@@ -249,7 +249,7 @@ def init_project() -> None:
     config_path = learning_dir / "config.json"
     with open(config_path, "w") as f:
         json.dump(config, f, indent=2)
-    print_success(f"Created config.json (Mode: {mode_names[learning_mode]}, macOS Reminders: {'enabled' if macos_reminders else 'disabled'})")
+    print_success(f"Создан config.json (Режим: {mode_names[learning_mode]}, Напоминания macOS: {'вкл' if macos_reminders else 'выкл'})")
 
     # Copy scripts
     scripts_dest = learning_dir / "scripts"
@@ -278,12 +278,12 @@ def init_project() -> None:
     elif claude_md_dest.exists():
         print_warning("CLAUDE.md already exists, skipping")
 
-    print(f"\n{Colors.GREEN}{Colors.BOLD}Initialization complete!{Colors.RESET}\n")
+    print(f"\n{Colors.GREEN}{Colors.BOLD}Инициализация завершена!{Colors.RESET}\n")
 
-    print_header("Available commands in Claude Code:")
-    print(f"  {Colors.CYAN}/learn [topic]{Colors.RESET}    - Initialize or continue learning")
-    print(f"  {Colors.CYAN}/review{Colors.RESET}           - Spaced repetition review session")
-    print(f"  {Colors.CYAN}/progress{Colors.RESET}         - Show detailed progress report")
+    print_header("Доступные команды в Claude Code:")
+    print(f"  {Colors.CYAN}/learn [тема]{Colors.RESET}     — Начать или продолжить обучение")
+    print(f"  {Colors.CYAN}/review{Colors.RESET}           — Сессия интервального повторения")
+    print(f"  {Colors.CYAN}/progress{Colors.RESET}         — Подробный отчёт о прогрессе")
     print()
 
 
@@ -307,8 +307,8 @@ def launch_coach(auto_review: bool = False) -> None:
     system_prompt_path = templates_dir / "modes" / learning_mode / "system_prompts" / "learn-faster.md"
 
     if not system_prompt_path.exists():
-        print_error(f"Error: System prompt for '{learning_mode}' mode not found")
-        print_dim(f"Expected at: {system_prompt_path}")
+        print_error(f"Ошибка: системный промпт для режима '{learning_mode}' не найден")
+        print_dim(f"Ожидался по пути: {system_prompt_path}")
         sys.exit(1)
 
     # Read the system prompt content (skip frontmatter)
@@ -332,8 +332,8 @@ def launch_coach(auto_review: bool = False) -> None:
     system_prompt = "".join(content_lines).strip()
 
     # Launch Claude Code with the system prompt
-    print_info("Launching Claude Code in learning coach mode...")
-    print_dim("(Using FASTER framework system prompt)\n")
+    print_info("Запуск Claude Code в режиме обучения...")
+    print_dim("(Используется системный промпт FASTER)\n")
 
     # Build command with optional /review prefix
     cmd = ["claude", "--system-prompt", system_prompt]
@@ -343,9 +343,9 @@ def launch_coach(auto_review: bool = False) -> None:
     try:
         subprocess.run(cmd, check=False)
     except FileNotFoundError:
-        print_error("Error: 'claude' command not found")
-        print_dim("Make sure Claude Code CLI is installed and in your PATH")
-        print_dim("Install from: https://claude.ai/download")
+        print_error("Ошибка: команда 'claude' не найдена")
+        print_dim("Убедись, что Claude Code CLI установлен и доступен в PATH")
+        print_dim("Установка: https://claude.ai/download")
         sys.exit(1)
 
 
@@ -363,31 +363,31 @@ def main() -> None:
             print(f"learn-faster version {__version__}")
             return
         elif command in ["help", "--help", "-h"]:
-            print("Learn FASTER - Accelerate learning with FASTER framework\n")
-            print("Usage:")
-            print("  learn-faster           Auto-init and launch Claude Code in coach mode")
-            print("  learn-faster init      Force re-initialization")
-            print("  learn-faster version   Show version")
+            print("Learn FASTER — Ускоренное обучение с фреймворком FASTER\n")
+            print("Использование:")
+            print("  learn-faster           Авто-инициализация и запуск Claude Code в режиме обучения")
+            print("  learn-faster init      Принудительная реинициализация")
+            print("  learn-faster version   Показать версию")
             print()
-            print("For more info: https://github.com/cheukyin175/learn-faster-kit")
+            print("Подробнее: https://github.com/cheukyin175/learn-faster-kit")
             return
         else:
-            print_error(f"Unknown command: {command}")
-            print_dim("Run 'learn-faster --help' for usage")
+            print_error(f"Неизвестная команда: {command}")
+            print_dim("Запусти 'learn-faster --help' для справки")
             sys.exit(1)
 
     # Default behavior: check init, then launch
     if not check_initialization():
-        print_info("First-time setup detected. Initializing...")
+        print_info("Первый запуск. Инициализация...")
         print()
         init_project()
         print()
-        print_header("Launching Claude Code with FASTER framework...")
+        print_header("Запуск Claude Code с фреймворком FASTER...")
         print()
         launch_coach(auto_review=False)
     else:
-        print_info("Launching Claude Code in learning coach mode...")
-        print_dim("(Starting with /review to check for due reviews)\n")
+        print_info("Запуск Claude Code в режиме обучения...")
+        print_dim("(Начинаем с /review для проверки запланированных повторений)\n")
         launch_coach(auto_review=True)
 
 

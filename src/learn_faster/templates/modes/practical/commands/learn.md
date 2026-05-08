@@ -14,7 +14,7 @@ Initialize project-based learning for the specified topic using the FASTER frame
 
 **If a topic already exists:**
 
-- Inform: "This project is already learning [topic name]"
+- Inform: "Этот проект уже изучает [topic name]"
 - Check for due reviews first (conduct before new learning if any)
 - Continue with current topic (1 project = 1 learning goal)
 
@@ -26,71 +26,71 @@ Initialize project-based learning for the specified topic using the FASTER frame
 ```json
 [
   {
-    "question": "What kind of projects do you want to build?",
-    "header": "Projects",
+    "question": "Какие проекты хочешь делать?",
+    "header": "Проекты",
     "multiSelect": true,
     "options": [
       {
-        "label": "Quick demos",
-        "description": "Small examples to try concepts (30 min)"
+        "label": "Быстрые демо",
+        "description": "Небольшие примеры для проверки концепций (30 мин)"
       },
       {
-        "label": "Useful tools",
-        "description": "Things you'll actually use (2-3 hours)"
+        "label": "Полезные инструменты",
+        "description": "То, что реально будешь использовать (2-3 часа)"
       },
       {
-        "label": "Portfolio pieces",
-        "description": "Projects to showcase skills"
+        "label": "Проекты для портфолио",
+        "description": "Проекты для демонстрации навыков"
       },
       {
-        "label": "Solve my problems",
-        "description": "Build solutions to real issues I have"
+        "label": "Решить мои задачи",
+        "description": "Построить решения для реальных проблем"
       }
     ]
   },
   {
-    "question": "How do you learn best by doing?",
-    "header": "Style",
+    "question": "Как тебе лучше учиться на практике?",
+    "header": "Стиль",
     "multiSelect": false,
     "options": [
       {
-        "label": "Follow then build",
-        "description": "See example, then build my own"
+        "label": "Сначала пример, потом сам",
+        "description": "Посмотреть пример, затем сделать своё"
       },
       {
-        "label": "Build from scratch",
-        "description": "Figure it out as I go"
+        "label": "Строить с нуля",
+        "description": "Разбираться по ходу дела"
       },
       {
-        "label": "Fix/extend code",
-        "description": "Start with working code, modify it"
+        "label": "Чинить/расширять код",
+        "description": "Начать с рабочего кода, модифицировать"
       },
       {
-        "label": "Copy-paste-understand",
-        "description": "Get it working, then understand how"
+        "label": "Скопировать-вставить-понять",
+        "description": "Сначала заставить работать, потом разобраться"
       }
     ]
   },
   {
-    "question": "How much time per session?",
-    "header": "Time",
+    "question": "Сколько времени на одну сессию?",
+    "header": "Время",
     "multiSelect": false,
     "options": [
       {
-        "label": "30 min",
-        "description": "Quick focused builds"
+        "label": "30 мин",
+        "description": "Быстрые фокусные сборки"
       },
       {
-        "label": "1-2 hours",
-        "description": "Complete small projects"
+        "label": "1-2 часа",
+        "description": "Завершить небольшие проекты"
       },
       {
-        "label": "Half day",
-        "description": "Deep project sessions"
+        "label": "Полдня",
+        "description": "Глубокие проектные сессии"
       },
       {
-        "label": "Flexible",
-        "description": "Depends on the day"
+        "label": "Гибко",
+        "description": "Зависит от дня"
       }
     ]
   }
@@ -120,6 +120,17 @@ Initialize project-based learning for the specified topic using the FASTER frame
 - **Iteration Path:** How to improve projects (v1 → v2 → v3)
 - **Portfolio Checkpoints:** Projects good enough to showcase
 - **Success Criteria:** "I shipped X working projects" not "I read about X"
+
+**Ongoing Learning (when topic already exists and syllabus is generated):**
+
+Before presenting the next syllabus item:
+
+1. **Activate prior knowledge:** "What do you already know about [next concept]?" or "Have you built anything similar?"
+2. **Build on their experience:** Connect to what they've built or to previously learned items
+3. **Follow the Concrete → Abstract → Concrete pattern:** Start with a real project example, derive the pattern, apply to a different project
+4. **Apply elaborative interrogation:** For every new technique, ask "Why does this approach work?" before proceeding
+5. **Use self-explanation checkpoints:** Pause after each step. Do not proceed without explanation.
+6. **Use faded guidance automatically:** Worked example → faded scaffold → independent build per concept
 
 **Important:**
 

@@ -28,7 +28,7 @@ def init_learning_topic(topic_name: str, base_dir: str = ".learning"):
     topic_dir = learning_dir / topic_slug
 
     if topic_dir.exists():
-        print(f"⚠️  Topic '{topic_name}' already exists at {topic_dir}")
+        print(f"⚠️  Тема «{topic_name}» уже существует: {topic_dir}")
         return str(topic_dir)
 
     topic_dir.mkdir(parents=True, exist_ok=True)
@@ -113,7 +113,7 @@ def init_learning_topic(topic_name: str, base_dir: str = ".learning"):
         ],
         "next_action": "generate_syllabus",
         "llm_directive": f"Immediately generate a comprehensive syllabus for '{topic_name}'. Write content to {topic_dir}/syllabus.md. Include: Overview, Prerequisites, Learning Objectives, 3-4 Phases with hands-on projects (🔨), Teaching Milestones, Resources, and Success Criteria. After writing, inform user syllabus is ready and show first 2-3 learning items.",
-        "suggested_response": f"✅ Created learning environment for {topic_name}!\n\nGenerating comprehensive syllabus now..."
+        "suggested_response": f"✅ Создана учебная среда для «{topic_name}»!\n\nГенерируем подробную программу обучения..."
     }
 
     print(json.dumps(output, indent=2))
@@ -124,8 +124,8 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) < 2:
-        print("Usage: python3 init_learning.py <topic_name> [base_dir]")
-        print("\nExample: python3 init_learning.py 'React Hooks' .learning")
+        print("Использование: python3 init_learning.py <название_темы> [базовая_директория]")
+        print("\nПример: python3 init_learning.py 'React Hooks' .learning")
         sys.exit(1)
 
     topic = sys.argv[1]

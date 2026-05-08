@@ -14,7 +14,7 @@ Initialize learning for the specified topic using the FASTER framework.
 
 **If a topic already exists:**
 
-- Inform: "This project is already learning [topic name]"
+- Inform: "Этот проект уже изучает [topic name]"
 - Check for due reviews first (conduct before new learning if any)
 - Continue with current topic (1 project = 1 learning goal)
 
@@ -26,48 +26,48 @@ Initialize learning for the specified topic using the FASTER framework.
 ```json
 [
   {
-    "question": "What level do you want to achieve with [topic]?",
-    "header": "Level",
+    "question": "Какого уровня ты хочешь достичь в [topic]?",
+    "header": "Уровень",
     "multiSelect": false,
     "options": [
       {
-        "label": "Beginner",
-        "description": "Fundamentals and basic concepts"
+        "label": "Начинающий",
+        "description": "Основы и базовые концепции"
       },
       {
-        "label": "Intermediate",
-        "description": "Practical skills and common patterns"
+        "label": "Средний",
+        "description": "Практические навыки и типовые паттерны"
       },
       {
-        "label": "Advanced",
-        "description": "Deep expertise and edge cases"
+        "label": "Продвинутый",
+        "description": "Глубокая экспертиза и граничные случаи"
       },
       {
-        "label": "Expert",
-        "description": "Mastery level, architecture, optimization"
+        "label": "Эксперт",
+        "description": "Уровень мастерства, архитектура, оптимизация"
       }
     ]
   },
   {
-    "question": "What do you want to focus on?",
-    "header": "Focus",
+    "question": "На чём хочешь сфокусироваться?",
+    "header": "Фокус",
     "multiSelect": true,
     "options": [
       {
-        "label": "Theory",
-        "description": "Concepts, principles, how things work"
+        "label": "Теория",
+        "description": "Концепции, принципы, как всё устроено"
       },
       {
-        "label": "Practice",
-        "description": "Hands-on coding and building projects"
+        "label": "Практика",
+        "description": "Hands-on, проекты, написание кода"
       },
       {
-        "label": "Real-world",
-        "description": "Production patterns and best practices"
+        "label": "Реальный мир",
+        "description": "Продакшн-паттерны и лучшие практики"
       },
       {
-        "label": "Interview prep",
-        "description": "Common questions and problem-solving"
+        "label": "Подготовка к интервью",
+        "description": "Типичные вопросы и решение задач"
       }
     ]
   }
@@ -88,6 +88,17 @@ Initialize learning for the specified topic using the FASTER framework.
 - All sections from the template file (Overview, Prerequisites, Learning Objectives, etc.)
 - 3-4 Phases with specific concepts + 🔨 hands-on projects
 - Checkboxes `- [ ]` for tracking progress
+
+**Ongoing Learning (when topic already exists and syllabus is generated):**
+
+Before presenting the next syllabus item:
+
+1. **Activate prior knowledge:** "What do you already know about [next concept]?" or "Have you encountered anything similar?"
+2. **Build on their answer:** Connect to what they know or to previously learned syllabus items
+3. **Follow the Concrete → Abstract → Concrete pattern:** Start with a relatable example, guide to the principle, apply to a new context
+4. **Apply elaborative interrogation:** For every new fact, ask "Why is this true?" or "How does this work?" before proceeding
+5. **Use self-explanation checkpoints:** Pause after each step of multi-step concepts. Do not proceed without explanation.
+6. **Use faded guidance automatically:** Worked example → faded example → independent practice per concept
 
 **Important:**
 

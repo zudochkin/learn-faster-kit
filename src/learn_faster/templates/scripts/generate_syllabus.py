@@ -22,7 +22,7 @@ def update_syllabus(topic_slug: str, syllabus_content: str, base_dir: str = ".le
     syllabus_path = topic_dir / "syllabus.md"
 
     if not topic_dir.exists():
-        print(f"❌ Topic '{topic_slug}' not found.")
+        print(f"❌ Тема «{topic_slug}» не найдена.")
         return False
 
     with open(syllabus_path, "w") as f:
@@ -39,7 +39,7 @@ def update_syllabus(topic_slug: str, syllabus_content: str, base_dir: str = ".le
     with open(metadata_path, "w") as f:
         json.dump(metadata, f, indent=2)
 
-    print(f"✅ Syllabus updated for '{topic_slug}'")
+    print(f"✅ Программа обучения обновлена для «{topic_slug}»")
     print(f"📄 {syllabus_path}")
 
     return True
@@ -103,9 +103,9 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) < 2:
-        print("Usage:")
-        print("  List topics:  python3 generate_syllabus.py list")
-        print("  Topic info:   python3 generate_syllabus.py info <topic_slug>")
+        print("Использование:")
+        print("  Список тем:   python3 generate_syllabus.py list")
+        print("  Инфо о теме:  python3 generate_syllabus.py info <slug_темы>")
         sys.exit(1)
 
     command = sys.argv[1]
@@ -117,7 +117,7 @@ if __name__ == "__main__":
                 "status": "no_topics",
                 "topics": [],
                 "llm_directive": "No learning topics found. Ask user what they'd like to learn and initialize a new topic.",
-                "suggested_response": "No learning topics found yet. What would you like to learn?"
+                "suggested_response": "Учебных тем пока нет. Что хочешь изучить?"
             }
             print(json.dumps(output, indent=2))
         else:
@@ -126,10 +126,10 @@ if __name__ == "__main__":
                 "topic_count": len(topics),
                 "topics": topics,
                 "llm_directive": "Show user the list of topics. Ask which one they'd like to work on or if they want to start a new one.",
-                "suggested_response": f"You have {len(topics)} learning topic(s):\n\n" + "\n".join([
-                    f"{'✅' if t['status'] == 'completed' else '📖'} {t['topic']} - {t['sessions']} sessions"
+                "suggested_response": f"У тебя {len(topics)} учебных тем:\n\n" + "\n".join([
+                    f"{'✅' if t['status'] == 'completed' else '📖'} {t['topic']} — {t['sessions']} сессий"
                     for t in topics
-                ]) + "\n\nWhich topic would you like to work on?"
+                ]) + "\n\nНад какой темой хочешь поработать?"
             }
             print(json.dumps(output, indent=2))
 
@@ -140,13 +140,13 @@ if __name__ == "__main__":
                 "status": "success",
                 "topic_info": info,
                 "llm_directive": "Display topic information to user. Check if reviews are due for this topic.",
-                "suggested_response": f"Topic: {info['topic']}\nSessions: {info['sessions']}\nStatus: {info['status']}"
+                "suggested_response": f"Тема: {info['topic']}\nСессий: {info['sessions']}\nСтатус: {info['status']}"
             }
             print(json.dumps(output, indent=2))
         else:
             output = {
                 "status": "error",
-                "error": f"Topic '{sys.argv[2]}' not found",
+                "error": f"Тема «{sys.argv[2]}» не найдена",
                 "llm_directive": "Inform user topic not found. Suggest listing all topics or creating new one."
             }
             print(json.dumps(output, indent=2))

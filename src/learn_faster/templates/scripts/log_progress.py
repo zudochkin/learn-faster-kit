@@ -21,7 +21,7 @@ def log_progress(topic_slug: str, content: str, concepts_learned: list = None, b
     topic_dir = Path(base_dir) / topic_slug
 
     if not topic_dir.exists():
-        print(f"❌ Topic '{topic_slug}' not found. Initialize it first.")
+        print(f"❌ Тема '{topic_slug}' не найдена. Сначала инициализируй её.")
         return False
 
     # Update metadata
@@ -63,7 +63,7 @@ def log_progress(topic_slug: str, content: str, concepts_learned: list = None, b
         "total_sessions": metadata['total_sessions'],
         "next_action": "add_to_review_schedule_and_quiz" if concepts_learned else "quiz_only",
         "llm_directive": directive,
-        "suggested_response": f"Session {metadata['total_sessions']} logged!" + (f" Added {len(concepts_learned)} concept(s) to track." if concepts_learned else "")
+        "suggested_response": f"Сессия {metadata['total_sessions']} записана!" + (f" Добавлено {len(concepts_learned)} концепций для отслеживания." if concepts_learned else "")
     }
 
     print(json.dumps(output, indent=2))

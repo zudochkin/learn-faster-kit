@@ -14,7 +14,7 @@ Initialize exam-focused learning for the specified topic using the FASTER framew
 
 **If a topic already exists:**
 
--   Inform: "This project is already learning [topic name]"
+-   Inform: "Этот проект уже изучает [topic name]"
 -   Check for due reviews first (conduct before new learning if any)
 -   Continue with current topic (1 project = 1 learning goal)
 
@@ -26,75 +26,75 @@ Initialize exam-focused learning for the specified topic using the FASTER framew
 ```json
 [
     {
-        "question": "What's your target for this exam/certification?",
-        "header": "Goal",
+        "question": "Какая у тебя цель на этом экзамене/сертификации?",
+        "header": "Цель",
         "multiSelect": false,
         "options": [
             {
-                "label": "Pass minimum",
-                "description": "Just need to pass, 70%+ score"
+                "label": "Минимально сдать",
+                "description": "Просто сдать, 70%+ баллов"
             },
             {
-                "label": "Pass comfortably",
-                "description": "Aiming for 80-85%"
+                "label": "Сдать уверенно",
+                "description": "Целюсь на 80-85%"
             },
             {
-                "label": "High score",
-                "description": "Want 90%+ or top percentile"
+                "label": "Высокий балл",
+                "description": "Хочу 90%+ или топ-перцентиль"
             },
             {
-                "label": "Perfect score",
-                "description": "Going for 100% mastery"
+                "label": "Максимальный балл",
+                "description": "Иду за 100%, полное владение"
             }
         ]
     },
     {
-        "question": "When is your exam?",
-        "header": "Timeline",
+        "question": "Когда экзамен?",
+        "header": "Сроки",
         "multiSelect": false,
         "options": [
             {
-                "label": "1-2 weeks",
-                "description": "Intensive cramming mode"
+                "label": "1-2 недели",
+                "description": "Интенсивная подготовка"
             },
             {
-                "label": "1 month",
-                "description": "Focused preparation"
+                "label": "1 месяц",
+                "description": "Сфокусированная подготовка"
             },
             {
-                "label": "2-3 months",
-                "description": "Steady build-up"
+                "label": "2-3 месяца",
+                "description": "Планомерное наращивание"
             },
             {
-                "label": "3+ months",
-                "description": "Long-term mastery"
+                "label": "3+ месяца",
+                "description": "Долгосрочное освоение"
             },
             {
-                "label": "No deadline",
-                "description": "Self-paced learning"
+                "label": "Без дедлайна",
+                "description": "В своём темпе"
             }
         ]
     },
     {
-        "question": "What study methods work best for you?",
-        "header": "Methods",
+        "question": "Какие методы подготовки тебе подходят лучше всего?",
+        "header": "Методы",
         "multiSelect": true,
         "options": [
             {
-                "label": "Practice tests",
-                "description": "Mock exams and timed quizzes"
+                "label": "Пробные тесты",
+                "description": "Имитация экзамена и тесты на время"
             },
             {
-                "label": "Flashcards",
-                "description": "Spaced repetition drills"
+                "label": "Карточки",
+                "description": "Интервальное повторение"
             },
             {
-                "label": "Problem solving",
-                "description": "Work through examples and cases"
+                "label": "Решение задач",
+                "description": "Разбор примеров и кейсов"
             },
             {
-                "label": "Teach-back",
-                "description": "Explain concepts in my own words"
+                "label": "Объяснение своими словами",
+                "description": "Пересказ концепций для закрепления"
             }
         ]
     }
@@ -133,6 +133,17 @@ Initialize exam-focused learning for the specified topic using the FASTER framew
     -   Full mock exams at end of phase
 -   **Weak Area Tracking:** System to identify and prioritize review topics
 -   **Success Criteria:** Target scores for each section
+
+**Ongoing Learning (when topic already exists and syllabus is generated):**
+
+Before presenting the next syllabus item:
+
+1. **Activate prior knowledge:** "What do you already know about [next concept]?" or "Have you seen this on practice tests?"
+2. **Build on their answer:** Connect to what they know or to previously learned items
+3. **Follow the Concrete → Abstract → Concrete pattern:** Start with a sample exam question, guide to the underlying rule, apply to a different question format
+4. **Apply elaborative interrogation:** For every new fact, ask "Why is this answer correct and others wrong?" before proceeding
+5. **Use self-explanation checkpoints:** Pause after each step of multi-step solutions. Do not proceed without explanation.
+6. **Use faded guidance automatically:** Worked example → faded example → independent practice per concept
 
 **Important:**
 
