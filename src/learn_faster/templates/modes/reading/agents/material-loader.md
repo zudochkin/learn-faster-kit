@@ -1,7 +1,7 @@
 ---
 name: material-loader
-description: Загружает материал курса (course.md со ссылками) или книги (book.pdf через pdf-mcp) или ручной ввод TOC. Парсит оглавление, генерирует syllabus.md и обогащает metadata.json. Вызывается из /learn при первом запуске режима reading.
-tools: Read, Write, Edit, Bash, Glob, WebFetch, ListMcpResourcesTool, ReadMcpResourceTool
+description: Загружает материал курса (course.md со ссылками), книги (book.pdf через pdf-mcp), одиночного YouTube-видео (через yt-dlp) или ручной ввод TOC. Парсит оглавление, генерирует syllabus.md и обогащает metadata.json. Вызывается из /learn при первом запуске режима reading.
+tools: Read, Write, Edit, Bash, Glob, WebFetch, ListMcpResourcesTool, ReadMcpResourceTool, AskUserQuestion
 model: sonnet
 ---
 
@@ -11,9 +11,10 @@ model: sonnet
 
 ## Input Contract
 
-Вызывающий передаёт тебе один из трёх параметров (в тексте промпта):
+Вызывающий передаёт тебе один из четырёх параметров (в тексте промпта):
 - `source=course_md, path=course.md`
 - `source=book_pdf, path=book.pdf`
+- `source=youtube_video, path=video.url`
 - `source=manual` (тогда сам получи оглавление через AskUserQuestion)
 
 Также:
@@ -90,6 +91,65 @@ model: sonnet
 3. Сохрани присланный текст во временный буфер, парсь как в Ветке 1 (course_md). Если оба формата не сработали — fallback на нумерованный список названий (по строке на главу).
 4. Перейди к **общему шагу записи**.
 
+### Ветка 4: source=youtube_video
+
+1. `Read` файл `video.url` — возьми первый непустой не-комментарий (`#`) URL.
+2. **Probe видео**:
+   ```bash
+   python3 .learning/scripts/youtube_loader.py probe <url>
+   ```
+   - Exit code `2` → yt-dlp не установлен. Сообщи пользователю с инструкцией:
+     ```
+     brew install yt-dlp        # macOS
+     uv tool install yt-dlp     # cross-platform
+     pipx install yt-dlp        # alternative
+     ```
+     И завершайся (главный coach предложит ручную пасту через AskUserQuestion).
+   - Exit code `1` → сетевая/парс-ошибка. Покажи `error` пользователю, завершайся.
+   - JSON содержит `{duration, title, has_chapters, chapters, available_subtitle_langs, video_id, webpage_url}`.
+
+3. **Определи TOC**:
+
+   **Если `has_chapters == true`** (у видео есть YouTube главы, ≥2 штук):
+   - Конвертируй `chapters` в `chapter_ranges = [{n, title, time_start, time_end}]` (нумерация с 1).
+
+   **Иначе** — `AskUserQuestion`:
+   ```json
+   {
+     "question": "У видео нет встроенных глав. Как разбить материал?",
+     "header": "TOC видео",
+     "multiSelect": false,
+     "options": [
+       { "label": "Одна сессия (всё видео)", "description": "Подходит для видео ≤25 мин — одна большая глава" },
+       { "label": "Вставлю TOC текстом", "description": "Пришлю строки `mm:ss Title` или `hh:mm:ss Title`" },
+       { "label": "Авто-нарезка по 10 мин", "description": "Грубо, но работает для лекций без структуры" }
+     ]
+   }
+   ```
+
+   - **Одна сессия**: `chapter_ranges = [{n: 1, title: <video title>, time_start: 0, time_end: duration}]`.
+   - **TOC текстом**: попроси прислать строки. Затем:
+     ```bash
+     printf '%s\n' "$TOC_TEXT" | python3 .learning/scripts/youtube_loader.py parse_toc <duration>
+     ```
+     Скрипт вернёт готовый `chapter_ranges`. Если ошибка — попроси переоформить.
+   - **Авто-нарезка**: раздели `duration` на куски по 600 секунд:
+     ```
+     n_chunks = ceil(duration / 600)
+     chapter_ranges = [{n: i+1, title: f"Часть {i+1}", time_start: i*600, time_end: min((i+1)*600, duration)} for i in range(n_chunks)]
+     ```
+
+4. **Скачай транскрипт**:
+   ```bash
+   python3 .learning/scripts/youtube_loader.py fetch <url> <topic_slug>
+   ```
+   - `status: "ok"` → транскрипт скачан в `.learning/<topic_slug>/transcript.vtt` и нормализован в `transcript.json`. Поле `transcript_source = "user" | "auto"`.
+   - `status: "no_transcript"` → у видео нет субтитров ни ручных, ни авто. Запомни `transcript_source = "none"` — coach в Step 3 переключится на manual-фолбэк.
+
+5. Сохрани для общего шага записи: `video_id`, `video_url`, `duration_seconds`, `transcript_source`, `chapter_ranges`.
+
+6. Перейди к **общему шагу записи**.
+
 ## Общий шаг записи
 
 После того как `chapters` собран:
@@ -99,15 +159,16 @@ model: sonnet
 
 ```markdown
 # <Title> — Syllabus
-Source: <course_md|book_pdf|manual>
-Source path: <course.md | book.pdf | manual paste>
+Source: <course_md|book_pdf|youtube_video|manual>
+Source path: <course.md | book.pdf | video.url | manual paste>
 Total chapters: <N>
 Generated: <ISO date>
 
 ## Chapters
 - [ ] 1. <title> — p.1-12       (PDF case)
 - [ ] 2. <title> — https://...   (course_md with URL)
-- [ ] 3. <title>                  (manual без URL)
+- [ ] 3. <title> — 03:42-12:15   (YouTube case, m:ss)
+- [ ] 4. <title>                  (manual без URL)
 ```
 
 Статусы:
@@ -118,6 +179,7 @@ Generated: <ISO date>
 Описание после `—`:
 - PDF → `p.<page_start>-<page_end>`
 - course_md/manual c URL → URL
+- youtube_video → `<m:ss>-<m:ss>` (или `<h:mm:ss>-<h:mm:ss>` для длинных), форматированный из `time_start`/`time_end`
 - course_md/manual без URL → пусто (только название)
 
 ### 2. Обогати metadata.json
@@ -133,26 +195,33 @@ Generated: <ISO date>
   "last_reviewed": null,
 
   "mode": "reading",
-  "source_type": "course_md | book_pdf | manual",
-  "source_path": "course.md | book.pdf | null",
+  "source_type": "course_md | book_pdf | youtube_video | manual",
+  "source_path": "course.md | book.pdf | video.url | null",
   "title": "<Title>",
   "total_chapters": <N>,
   "current_chapter": 1,
   "chapter_ranges": [
     {"n": 1, "title": "...", "page_start": 1, "page_end": 12},
-    {"n": 2, "title": "...", "url": "https://..."}
+    {"n": 2, "title": "...", "url": "https://..."},
+    {"n": 3, "title": "...", "time_start": 222.0, "time_end": 735.0}
   ],
   "pdf_tools": {
     "toc": "mcp__pdf-mcp__get_outline",
     "extract": "mcp__pdf-mcp__extract_pages",
     "search": "mcp__pdf-mcp__search_text"
-  }
+  },
+  "video_url": "https://youtu.be/<id>",
+  "video_id": "<id>",
+  "duration_seconds": 3600.0,
+  "transcript_source": "user | auto | none"
 }
 ```
 
-Поле `pdf_tools` пиши **только** для `source_type=book_pdf` (имена из шага 3 Ветки 2). Для course_md/manual его опусти.
+Поле `pdf_tools` пиши **только** для `source_type=book_pdf` (имена из шага 3 Ветки 2). Для остальных опусти.
 
-Поле `chapter_ranges[i].url` — только если URL есть. Поле `page_start/page_end` — только для PDF.
+Поля `video_url`, `video_id`, `duration_seconds`, `transcript_source` пиши **только** для `source_type=youtube_video`.
+
+Поле `chapter_ranges[i].url` — только если URL есть. Поле `page_start/page_end` — только для PDF. Поле `time_start/time_end` — только для YouTube (float seconds).
 
 ### 3. Создай директорию для конспектов
 `mkdir -p .learning/<topic_slug>/chapters` (если ещё нет).

@@ -1,17 +1,19 @@
 ---
-description: Начать изучение материала (course.md / book.pdf) или продолжить текущую главу
+description: Начать изучение материала (course.md / book.pdf / video.url) или продолжить текущую главу
 ---
 
 ## Context
 
 - course.md в корне: !`test -f course.md && echo "найден" || echo "(нет)"`
 - book.pdf в корне:  !`test -f book.pdf && echo "найден" || echo "(нет)"`
+- video.url в корне: !`test -f video.url && echo "найден" || echo "(нет)"`
+- yt-dlp:            !`which yt-dlp >/dev/null 2>&1 && echo "ok" || echo "не установлен"`
 - Learning dir:      !`test -d .learning && echo "есть" || echo "(нет)"`
 - Текущая тема:      !`ls .learning 2>/dev/null | grep -v scripts || echo "(нет темы)"`
 
 ## Your Task
 
-Source-driven learning: материал уже зафиксирован (course.md или book.pdf). Твоя задача — провести пользователя через него главу за главой с активным чтением, конспектом и SM-2 повторениями.
+Source-driven learning: материал уже зафиксирован (course.md, book.pdf или video.url). Твоя задача — провести пользователя через него главу за главой с активным чтением, конспектом и SM-2 повторениями.
 
 ### Если уже есть тема в `.learning/` с `syllabus_generated == true`
 Ветка **resume**:
@@ -53,30 +55,45 @@ Source-driven learning: материал уже зафиксирован (course
    > Затем перезапусти меня. Или продолжим с ручным вводом оглавления?
    И предложи через `AskUserQuestion` ручную пасту как fallback.
 
-**Оба файла есть** → спроси через `AskUserQuestion`:
+**Только `video.url`** →
+1. Проверь `yt-dlp`: `which yt-dlp >/dev/null 2>&1`.
+2. Если найден → invoke `@material-loader` с `source=youtube_video, path=video.url`.
+3. Если `yt-dlp` нет — скажи пользователю:
+   > Для работы с YouTube нужен yt-dlp:
+   > ```
+   > brew install yt-dlp        # macOS
+   > uv tool install yt-dlp     # cross-platform
+   > pipx install yt-dlp        # alternative
+   > ```
+   > Затем перезапусти меня. Или продолжим с ручным вводом оглавления?
+   И предложи через `AskUserQuestion` ручную пасту как fallback.
+
+**Несколько источников найдено** (любая комбинация course.md / book.pdf / video.url) → собери динамический `AskUserQuestion` с одной опцией на каждый найденный файл:
 
 ```json
 {
-  "question": "В корне есть и course.md, и book.pdf. По какому материалу учимся?",
+  "question": "В корне найдено несколько источников. По какому материалу учимся?",
   "header": "Источник",
   "multiSelect": false,
   "options": [
-    { "label": "course.md (онлайн-курс)", "description": "Таблица или список ссылок" },
-    { "label": "book.pdf (книга)", "description": "Извлечение через pdf-mcp" }
+    { "label": "course.md", "description": "Онлайн-курс (таблица или список ссылок)" },
+    { "label": "book.pdf", "description": "Книга через pdf-mcp" },
+    { "label": "video.url", "description": "YouTube-видео через yt-dlp" }
   ]
 }
 ```
+(показывай только реально найденные опции). По выбору — invoke `@material-loader` с соответствующим `source=...`.
 
 **Ничего нет** → `AskUserQuestion`:
 
 ```json
 {
-  "question": "В корне проекта нет ни course.md, ни book.pdf. Как поступим?",
+  "question": "В корне нет course.md, book.pdf или video.url. Как поступим?",
   "header": "Источник",
   "multiSelect": false,
   "options": [
     { "label": "Вставить оглавление пастой", "description": "Я пришлю список глав/уроков прямо в чат" },
-    { "label": "Положу файл и перезапущу", "description": "Закроем сейчас, я положу course.md или book.pdf и снова /learn" }
+    { "label": "Положу файл и перезапущу", "description": "Закроем сейчас, я положу course.md / book.pdf / video.url и снова /learn" }
   ]
 }
 ```
@@ -112,5 +129,6 @@ Source-driven learning: материал уже зафиксирован (course
 ## Важно
 
 - Не пытайся сам распарсить PDF — это работа `@material-loader` через `mcp__pdf-mcp__*`.
+- Не пытайся сам распарсить YouTube или VTT — это работа `@material-loader` и `youtube_loader.py`. Не вызывай `yt-dlp` напрямую из главного coach-а.
 - Не генерируй syllabus с нуля — материал зафиксирован, мы идём по нему.
 - Перед любой новой главой — проверь due reviews. Reviews первее.

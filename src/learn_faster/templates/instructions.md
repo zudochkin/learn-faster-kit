@@ -30,7 +30,8 @@ project-root/
     │   ├── review_scheduler.py
     │   ├── concept_quiz.py
     │   ├── journal_logger.py
-    │   └── generate_syllabus.py
+    │   ├── generate_syllabus.py
+    │   └── youtube_loader.py     (reading mode: YouTube via yt-dlp)
     ├── references/
     │   └── faster_framework.md
     └── <topic-slug>/

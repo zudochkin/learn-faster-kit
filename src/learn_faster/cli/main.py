@@ -93,7 +93,10 @@ def create_or_update_settings(claude_dir: Path, learning_mode: str = "balanced")
         allow_list.extend([
             "mcp__pdf-mcp__*",
             "Read(./book.pdf)",
-            "Read(./course.md)"
+            "Read(./course.md)",
+            "Read(./video.url)",
+            "Bash(yt-dlp:*)",
+            "Bash(which yt-dlp:*)"
         ])
 
     # Default settings for Learn FASTER
@@ -195,6 +198,54 @@ def check_pdf_mcp_installed() -> None:
     print()
 
 
+def check_yt_dlp_installed() -> None:
+    """Check if yt-dlp CLI is on PATH.
+
+    Informational only — never blocks init. Used for the 'reading' mode where
+    YouTube videos (video.url) need yt-dlp to download transcripts.
+    """
+    import subprocess
+    from datetime import datetime, timedelta
+
+    try:
+        result = subprocess.run(
+            ["yt-dlp", "--version"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+    except FileNotFoundError:
+        print_warning("yt-dlp не найден в PATH.")
+        print_dim("Нужен только для обучения по YouTube-видео (video.url). Для course.md / book.pdf / ручного ввода — не обязателен.")
+        print_dim("Установка:")
+        print(f"  {Colors.CYAN}brew install yt-dlp{Colors.RESET}        # macOS")
+        print(f"  {Colors.CYAN}uv tool install yt-dlp{Colors.RESET}     # cross-platform")
+        print(f"  {Colors.CYAN}pipx install yt-dlp{Colors.RESET}        # alternative")
+        print()
+        return
+    except subprocess.TimeoutExpired:
+        print_warning("Таймаут при проверке yt-dlp — пропускаю.")
+        return
+    except Exception as e:
+        print_warning(f"Не удалось проверить yt-dlp: {e}")
+        return
+
+    if result.returncode != 0:
+        print_warning("Команда `yt-dlp --version` вернула ошибку — проверка пропущена.")
+        return
+
+    version = result.stdout.strip()
+    print_success(f"yt-dlp найден (версия {version})")
+
+    # Warn if older than 6 months — YouTube часто ломает старые версии
+    try:
+        version_date = datetime.strptime(version, "%Y.%m.%d")
+        if datetime.now() - version_date > timedelta(days=180):
+            print_warning(f"yt-dlp старше 6 месяцев — YouTube часто ломает старые версии. Обнови: `brew upgrade yt-dlp` или `uv tool upgrade yt-dlp`.")
+    except ValueError:
+        pass
+
+
 def check_initialization() -> bool:
     """Check if project has been initialized."""
     config_path = Path.cwd() / ".learning" / "config.json"
@@ -253,6 +304,7 @@ def init_project() -> None:
 
     if learning_mode == "reading":
         check_pdf_mcp_installed()
+        check_yt_dlp_installed()
 
     # Ask about macOS Reminders (only on macOS)
     macos_reminders = False
