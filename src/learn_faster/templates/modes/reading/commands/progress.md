@@ -4,8 +4,8 @@ description: Подробный отчёт о прогрессе по матер
 
 ## Context
 
-- Learning directory: !`ls -d .learning 2>/dev/null`
-- Текущая тема: !`ls .learning/ 2>/dev/null`
+- Learning directory: !`test -d .learning && echo "есть" || echo "(нет)"`
+- Текущая тема: !`ls .learning 2>/dev/null | grep -v scripts || echo "(нет темы)"`
 
 **Note:** Если `.learning/` нет — сообщи пользователю запустить `/learn`. Игнорируй папку `scripts/`.
 

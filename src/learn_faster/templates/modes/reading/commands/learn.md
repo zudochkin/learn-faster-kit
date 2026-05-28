@@ -4,9 +4,10 @@ description: Начать изучение материала (course.md / book.
 
 ## Context
 
-- course.md в корне: !`ls course.md 2>/dev/null`
-- book.pdf в корне:  !`ls book.pdf 2>/dev/null`
-- Текущая тема:      !`ls .learning/ 2>/dev/null | grep -v scripts`
+- course.md в корне: !`test -f course.md && echo "найден" || echo "(нет)"`
+- book.pdf в корне:  !`test -f book.pdf && echo "найден" || echo "(нет)"`
+- Learning dir:      !`test -d .learning && echo "есть" || echo "(нет)"`
+- Текущая тема:      !`ls .learning 2>/dev/null | grep -v scripts || echo "(нет темы)"`
 
 ## Your Task
 

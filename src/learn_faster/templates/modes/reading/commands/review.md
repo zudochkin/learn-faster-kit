@@ -4,8 +4,8 @@ description: Conduct spaced repetition review session for learned concepts
 
 ## Context
 
-- Learning directory: !`ls -d .learning 2>/dev/null`
-- Current topic: !`ls .learning/ 2>/dev/null`
+- Learning directory: !`test -d .learning && echo "есть" || echo "(нет)"`
+- Current topic: !`ls .learning 2>/dev/null | grep -v scripts || echo "(нет темы)"`
 
 **Note:** If `.learning/` doesn't exist, inform user to run `/learn [topic]`. Check topic folders (ignore `scripts/`).
 

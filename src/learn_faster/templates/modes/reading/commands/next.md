@@ -4,7 +4,7 @@ description: Перейти к следующей главе и провести
 
 ## Context
 
-- Текущая тема: !`ls .learning/ 2>/dev/null | grep -v scripts`
+- Текущая тема: !`ls .learning 2>/dev/null | grep -v scripts || echo "(нет темы)"`
 
 ## Your Task
 
