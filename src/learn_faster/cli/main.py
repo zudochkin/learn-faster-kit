@@ -77,21 +77,29 @@ def get_templates_dir() -> Path:
     return Path(__file__).parent.parent / "templates"
 
 
-def create_or_update_settings(claude_dir: Path) -> None:
+def create_or_update_settings(claude_dir: Path, learning_mode: str = "balanced") -> None:
     """Create or update .claude/settings.local.json."""
     settings_file = claude_dir / "settings.local.json"
+
+    allow_list = [
+        "Bash(python3 .learning/scripts/:*)",
+        "Bash(ls:*)",
+        "Read(.learning/**)",
+        "Write(.learning/**)",
+        "Write(**/*.md)",
+        "Read(**/*.md)"
+    ]
+    if learning_mode == "reading":
+        allow_list.extend([
+            "mcp__pdf-mcp__*",
+            "Read(./book.pdf)",
+            "Read(./course.md)"
+        ])
 
     # Default settings for Learn FASTER
     default_settings = {
         "permissions": {
-            "allow": [
-                "Bash(python3 .learning/scripts/:*)",
-                "Bash(ls:*)",
-                "Read(.learning/**)",
-                "Write(.learning/**)",
-                "Write(**/*.md)",
-                "Read(**/*.md)"
-            ],
+            "allow": allow_list,
             "deny": [
                 "Bash(rm:*)",
                 "Bash(curl:*)",
@@ -146,6 +154,47 @@ def create_or_update_settings(claude_dir: Path) -> None:
         json.dump(settings, f, indent=2)
 
 
+def check_pdf_mcp_installed() -> None:
+    """Check if pdf-mcp MCP server is configured in Claude Code.
+
+    Informational only — never blocks init. Used for the 'reading' mode where
+    book.pdf-based learning needs pdf-mcp tools (mcp__pdf-mcp__*).
+    """
+    import subprocess
+
+    try:
+        result = subprocess.run(
+            ["claude", "mcp", "list"],
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+    except FileNotFoundError:
+        print_warning("Claude CLI не найден в PATH — проверка pdf-mcp пропущена.")
+        return
+    except subprocess.TimeoutExpired:
+        print_warning("Таймаут при проверке MCP-серверов — пропускаю.")
+        return
+    except Exception as e:
+        print_warning(f"Не удалось проверить MCP-серверы: {e}")
+        return
+
+    if result.returncode != 0:
+        print_warning("Команда `claude mcp list` вернула ошибку — проверка pdf-mcp пропущена.")
+        return
+
+    if "pdf-mcp" in result.stdout.lower():
+        print_success("pdf-mcp обнаружен в MCP-конфиге Claude Code")
+        return
+
+    print_warning("pdf-mcp MCP-сервер не найден в Claude Code.")
+    print_dim("Нужен только для обучения по PDF-книгам. Для course.md или ручного ввода — не обязателен.")
+    print_dim("Установка:")
+    print(f"  {Colors.CYAN}pip install pdf-mcp{Colors.RESET}")
+    print(f"  {Colors.CYAN}claude mcp add pdf-mcp -- pdf-mcp{Colors.RESET}")
+    print()
+
+
 def check_initialization() -> bool:
     """Check if project has been initialized."""
     config_path = Path.cwd() / ".learning" / "config.json"
@@ -183,6 +232,7 @@ def init_project() -> None:
                 ('Теоретический    — Глубокое концептуальное понимание', 'theory'),
                 ('Практический     — Сразу строить проекты, учиться на деле', 'practical'),
                 ('Программирование — Учиться через создание проектов', 'programming'),
+                ('Изучение материала — Прохождение курса/книги шаг за шагом, конспекты, активное чтение', 'reading'),
             ],
             default='balanced',
         ),
@@ -196,9 +246,13 @@ def init_project() -> None:
         "theory": "Теоретический",
         "practical": "Практический",
         "balanced": "Сбалансированный",
-        "programming": "Программирование"
+        "programming": "Программирование",
+        "reading": "Изучение материала"
     }
     print_success(f"Выбрано: {mode_names[learning_mode]}\n")
+
+    if learning_mode == "reading":
+        check_pdf_mcp_installed()
 
     # Ask about macOS Reminders (only on macOS)
     macos_reminders = False
@@ -234,7 +288,7 @@ def init_project() -> None:
             print_success(f"Copied command: {file.name}")
 
     # Create/update settings.local.json
-    create_or_update_settings(claude_dir)
+    create_or_update_settings(claude_dir, learning_mode)
 
     # Create .learning directory structure
     learning_dir = cwd / ".learning"
